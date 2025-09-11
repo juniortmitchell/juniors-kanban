@@ -21,5 +21,5 @@ public class KanbanList
 
   //Properties to help with navigation
   public Board Board { get; set; } = null!;
-  public ICollection<Card> Cards { get; set; } = new List<Card>();
+  public ICollection<Card> Cards { get; set; } = [];
 }
