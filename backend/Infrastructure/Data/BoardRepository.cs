@@ -23,6 +23,7 @@ public class BoardRepository(KanbanDbContext dbContext) : IBoardRepository
     if (itemToDelete != null)
     {
       _dbContext.Boards.Remove(itemToDelete);
+      await _dbContext.SaveChangesAsync();
       return itemToDelete;
     }
 
