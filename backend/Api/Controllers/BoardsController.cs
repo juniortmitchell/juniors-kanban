@@ -1,9 +1,7 @@
 using Api.DTOs;
 using Core.Entites;
 using Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Api.Controllers
 {
@@ -34,10 +32,16 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Board>> CreateBoard([FromBody] CreateBoardRequest request)
+        public async Task<ActionResult<BoardResponse>> CreateBoard([FromBody] CreateBoardRequest request)
         {
             var newBoard = await _repo.CreateBoardAsync(request.Title);
-            return CreatedAtAction(nameof(GetBoardById), new { id = newBoard.Id }, newBoard);
+            var response = new BoardResponse
+            {
+                Id = newBoard.Id,
+                Title = newBoard.Title,
+                CreatedAt = newBoard.CreatedAt
+            };
+            return CreatedAtAction(nameof(GetBoardById), new { id = newBoard.Id }, response);
         }
 
         [HttpDelete("{id}")]
@@ -48,20 +52,29 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Board>> UpdateBoard(int id, [FromBody] UpdateBoardRequest request)
+        public async Task<ActionResult<BoardResponse>> UpdateBoard(int id, [FromBody] UpdateBoardRequest request)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             var boardToUpdate = new Board { Id = id, Title = request.Title };
             var updatedBoard = await _repo.UpdateBoardAsync(boardToUpdate);
 
             if (updatedBoard == null)
             {
-                return NotFound($"Board with ID {id} not found");
+                return NotFound($"Could not find board with ID {id}");
             }
 
-            return Ok(updatedBoard);
+            var response = new BoardResponse
+            {
+                Id = updatedBoard.Id,
+                Title = updatedBoard.Title,
+                CreatedAt = updatedBoard.CreatedAt
+            };
+
+            return Ok(response);
         }
     }
 }

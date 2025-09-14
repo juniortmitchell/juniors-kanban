@@ -10,9 +10,21 @@ public class BoardRepository(KanbanDbContext dbContext) : IBoardRepository
   private readonly KanbanDbContext _dbContext = dbContext;
   public async Task<Board> CreateBoardAsync(string title)
   {
-    Board newBoard = new Board() { Title = title };
+    Board newBoard = new() { Title = title };
     await _dbContext.Boards.AddAsync(newBoard);
     await _dbContext.SaveChangesAsync();
+
+    // create the three default lists
+    var defaultLists = new List<KanbanList>
+    {
+      new() { Type = ListType.Todo, Title = "Todo", BoardId = newBoard.Id },
+      new() { Type = ListType.Doing, Title = "Doing", BoardId = newBoard.Id },
+      new() { Type = ListType.Done, Title = "Done", BoardId = newBoard.Id }
+    };
+
+    await _dbContext.KanbanLists.AddRangeAsync(defaultLists);
+    await _dbContext.SaveChangesAsync();
+
     return newBoard;
   }
 
@@ -49,17 +61,16 @@ public class BoardRepository(KanbanDbContext dbContext) : IBoardRepository
     return boards;
   }
 
-  public Task<Board?> UpdateBoardAsync(Board board)
+  public async Task<Board?> UpdateBoardAsync(Board board)
   {
-    // var existingBoard = await _dbContext.Boards.FindAsync(board.Id);
+    var existingBoard = await _dbContext.Boards.FindAsync(board.Id);
 
-    // if (existingBoard == null) return null;
+    if (existingBoard == null) return null;
 
-    // existingBoard = board;
+    // tracked entity (commenting cause I need to read deeper into the docs of this)
+    existingBoard.Title = board.Title;
 
-    // _dbContext.Boards.Update(board);
-    // await _dbContext.SaveChangesAsync();
-    // return existingBoard;
-    throw new NotImplementedException();
+    await _dbContext.SaveChangesAsync();
+    return existingBoard;
   }
 }
