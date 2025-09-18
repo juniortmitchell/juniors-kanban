@@ -80,16 +80,25 @@ function Card({
 
         <span className="text-xs text-gray-400">
           {(() => {
-            console.log('Card createdAt:', card.createdAt, typeof card.createdAt)
+            console.log(
+              'Card createdAt:',
+              card.createdAt,
+              typeof card.createdAt,
+            )
             if (!card.createdAt) return 'No date'
-            
+
             const date = new Date(card.createdAt)
-            console.log('Parsed date:', date, 'isValid:', !isNaN(date.getTime()))
-            
+            console.log(
+              'Parsed date:',
+              date,
+              'isValid:',
+              !isNaN(date.getTime()),
+            )
+
             if (isNaN(date.getTime())) {
               return 'Invalid date'
             }
-            
+
             return date.toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',

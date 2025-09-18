@@ -28,14 +28,14 @@ function BoardHeader({ title, sidebarCollapsed = false }: BoardHeaderProps) {
             </p>
           )}
         </div>
-        <button
+        {/* <button
           type="button"
           className="text-gray-800 bg-amber-400 hover:bg-amber-500 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 hover:cursor-pointer transition-colors"
           disabled={!selectedBoard}
           hidden={!selectedBoard}
         >
           + Add New Task
-        </button>
+        </button> */}
       </div>
     </>
   )
