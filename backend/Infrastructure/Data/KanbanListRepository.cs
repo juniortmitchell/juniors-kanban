@@ -12,7 +12,7 @@ public class KanbanListRepository(KanbanDbContext dbContext) : IKanbanListReposi
   {
     var lists = await _dbContext.KanbanLists
         .Where(l => l.BoardId == boardId)
-        .OrderBy(l => l.Position)
+        // .OrderBy(l => l.Position)
         .ToListAsync();
     return lists;
   }

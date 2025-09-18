@@ -13,8 +13,17 @@ builder.Services.AddControllers()
       options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
       options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     });
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-// builder.Services.AddOpenApi();
+
+//cors - More permissive for development
+builder.Services.AddCors(options =>
+{
+  options.AddDefaultPolicy(policy =>
+  {
+    policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+  });
+});
 
 builder.Services.AddDbContext<KanbanDbContext>(options => options.UseInMemoryDatabase("InMemory"));
 
@@ -25,14 +34,7 @@ builder.Services.AddScoped<ICardRepository, CardRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
-//     app.MapOpenApi();
-// }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseCors(); // Use the default policy
 
 app.MapControllers();
 

@@ -4,9 +4,11 @@ import './components/Sidebar'
 import Sidebar from './components/Sidebar'
 import MainBoard from './components/Mainboard'
 import BoardHeader from './components/BoardHeader'
+import { BoardProvider, useBoard } from './contexts/BoardContext'
 
-function App() {
+function AppContent() {
   const [isSidebarHidden, setIsSidebarHidden] = useState(false)
+  const { selectedBoard } = useBoard()
 
   return (
     <div className="">
@@ -15,11 +17,19 @@ function App() {
         onToggle={() => setIsSidebarHidden(!isSidebarHidden)}
       />
       <BoardHeader
-        title="Example board title"
+        title={selectedBoard?.title || 'Select a board'}
         sidebarCollapsed={isSidebarHidden}
       />
       <MainBoard sidebarCollapsed={isSidebarHidden} />
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BoardProvider>
+      <AppContent />
+    </BoardProvider>
   )
 }
 
