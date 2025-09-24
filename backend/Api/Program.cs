@@ -19,6 +19,7 @@ builder.Services.AddCors(options =>
 {
   options.AddDefaultPolicy(policy =>
   {
+    // TODO: change this to with origins and specify port that the react app runs on, current was just for testing
     policy.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
