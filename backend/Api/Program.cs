@@ -31,6 +31,7 @@ builder.Services.AddDbContext<KanbanDbContext>(options => options.UseInMemoryDat
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<IKanbanListRepository, KanbanListRepository>();
 builder.Services.AddScoped<ICardRepository, CardRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
